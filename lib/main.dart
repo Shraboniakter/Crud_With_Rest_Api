@@ -1,4 +1,5 @@
 import 'package:crud_with_rest_api/Screen/ProductCreateScreen.dart';
+import 'package:crud_with_rest_api/Screen/ProductGridViewScreen.dart';
 import 'package:flutter/material.dart';
 
 void main(){
@@ -10,7 +11,7 @@ class app extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      home: ProductCreateScreen(),
+      home: ProductGridViewScreen(),
       debugShowCheckedModeBanner: false,
     );
   }

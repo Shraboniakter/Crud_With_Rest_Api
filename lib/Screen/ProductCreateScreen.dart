@@ -3,6 +3,8 @@ import 'package:crud_with_rest_api/style/Style.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 
+import 'ProductGridViewScreen.dart';
+
 class ProductCreateScreen extends StatefulWidget {
   const ProductCreateScreen({super.key});
 
@@ -66,7 +68,6 @@ class _ProductCreateScreenState extends State<ProductCreateScreen> {
 
     }
 
-
   }
 
   @override
@@ -75,7 +76,28 @@ class _ProductCreateScreenState extends State<ProductCreateScreen> {
       appBar: AppBar(
         backgroundColor: colorWhite,
 
-        title: Center(child: Text("Create Product",)),),
+        title: Text(
+          "Create Product ",
+          style: TextStyle(color: Colors.black),
+        ),
+        centerTitle: true,
+
+        // RIGHT arrow → ProductGridViewScreen
+        actions: [
+          IconButton(
+            icon: Icon(Icons.arrow_forward, color: Colors.black),
+            onPressed: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => ProductGridViewScreen(),
+                ),
+              );
+            },
+          ),
+        ],
+      ),
+
       body: Stack(
         children: [
           ScreenBackground(context),
