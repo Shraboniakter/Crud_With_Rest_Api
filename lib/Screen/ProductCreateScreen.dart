@@ -72,14 +72,17 @@ class _ProductCreateScreenState extends State<ProductCreateScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: Text("Create Product"),),
+      appBar: AppBar(
+        backgroundColor: colorWhite,
+
+        title: Center(child: Text("Create Product",)),),
       body: Stack(
         children: [
           ScreenBackground(context),
 
           Container(
             child: Loading
-                ? Center(child: SpinKitCircle(color: colorGreen,))
+                ? Center(child: SpinKitWaveSpinner(color: colorGreen,))
                 : SingleChildScrollView(
               padding: EdgeInsets.all(20),
               child: Column(
