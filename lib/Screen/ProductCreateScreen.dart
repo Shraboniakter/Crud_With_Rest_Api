@@ -1,6 +1,7 @@
 import 'package:crud_with_rest_api/RestClient/RestClient.dart';
 import 'package:crud_with_rest_api/style/Style.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_spinkit/flutter_spinkit.dart';
 
 class ProductCreateScreen extends StatefulWidget {
   const ProductCreateScreen({super.key});
@@ -19,6 +20,8 @@ class _ProductCreateScreenState extends State<ProductCreateScreen> {
     "TotalPrice":"",
     "UnitPrice":""
   };
+  bool Loading = false;
+
   InputOnChange(Mapkey,Textvalue){
     setState(() {
       FormValue.update(Mapkey, (value) => Textvalue);
@@ -53,8 +56,13 @@ class _ProductCreateScreenState extends State<ProductCreateScreen> {
 
     }
     else{
+      setState(() {
+        Loading=true;
+      });
     await  ProductCreateRequest(FormValue);
-
+      setState(() {
+        Loading=false;
+      });
 
     }
 
@@ -68,87 +76,87 @@ class _ProductCreateScreenState extends State<ProductCreateScreen> {
       body: Stack(
         children: [
           ScreenBackground(context),
-          Container(child: SingleChildScrollView(
-            padding: EdgeInsets.all(20),
-            child: Column(
-              children: [
-                TextFormField(
-                  decoration: AppInputDecoration("Product Name"),
-                  onChanged: (Textvalue){
-                    InputOnChange("ProductName", Textvalue);
 
-                },),
-                SizedBox(height: 20,),
-                TextFormField(
-                  decoration: AppInputDecoration("Product Code"),
-                  onChanged: (Textvalue){
-                    InputOnChange("ProductCode", Textvalue);
+          Container(
+            child: Loading
+                ? Center(child: SpinKitCircle(color: colorGreen,))
+                : SingleChildScrollView(
+              padding: EdgeInsets.all(20),
+              child: Column(
+                children: [
+                  TextFormField(
+                    decoration: AppInputDecoration("Product Name"),
+                    onChanged: (Textvalue) {
+                      InputOnChange("ProductName", Textvalue);
+                    },
+                  ),
+                  SizedBox(height: 20),
 
-                },),
-                SizedBox(height: 20,),
-                TextFormField(
-                  decoration: AppInputDecoration("Product Image"),
-                  onChanged: (Textvalue){
-                    InputOnChange("Img", Textvalue);
+                  TextFormField(
+                    decoration: AppInputDecoration("Product Code"),
+                    onChanged: (Textvalue) {
+                      InputOnChange("ProductCode", Textvalue);
+                    },
+                  ),
+                  SizedBox(height: 20),
 
-                },),
-                SizedBox(height: 20,),
-                TextFormField(
-                  decoration: AppInputDecoration("Unit Price"),
-                  onChanged: (Textvalue){
-                    InputOnChange("UnitPrice", Textvalue);
+                  TextFormField(
+                    decoration: AppInputDecoration("Product Image"),
+                    onChanged: (Textvalue) {
+                      InputOnChange("Img", Textvalue);
+                    },
+                  ),
+                  SizedBox(height: 20),
 
-                },),
-                SizedBox(height: 20,),
-                TextFormField(
-                  decoration: AppInputDecoration("Total Price"),
-                  onChanged: (Textvalue){
-                    InputOnChange("TotalPrice", Textvalue);
+                  TextFormField(
+                    decoration: AppInputDecoration("Unit Price"),
+                    onChanged: (Textvalue) {
+                      InputOnChange("UnitPrice", Textvalue);
+                    },
+                  ),
+                  SizedBox(height: 20),
 
-                },),
-                SizedBox(height: 20,),
-                AppDropDownStyle(
-                   DropdownButton(
+                  TextFormField(
+                    decoration: AppInputDecoration("Total Price"),
+                    onChanged: (Textvalue) {
+                      InputOnChange("TotalPrice", Textvalue);
+                    },
+                  ),
+                  SizedBox(height: 20),
+
+                  AppDropDownStyle(
+                    DropdownButton(
                       value: FormValue['Qty'],
                       items: [
-                        DropdownMenuItem(child:Text('Select Qt') , value: '',),
-                        DropdownMenuItem(child:Text('1 pcs') , value: '1 pcs',),
-                        DropdownMenuItem(child:Text('2 pcs') , value: '2 pcs',),
-                        DropdownMenuItem(child:Text('3 pcs') , value: '3 pcs',),
-                        DropdownMenuItem(child:Text('4 pcs') , value: '4 pcs',),
+                        DropdownMenuItem(child: Text('Select Qt'), value: ''),
+                        DropdownMenuItem(child: Text('1 pcs'), value: '1 pcs'),
+                        DropdownMenuItem(child: Text('2 pcs'), value: '2 pcs'),
+                        DropdownMenuItem(child: Text('3 pcs'), value: '3 pcs'),
+                        DropdownMenuItem(child: Text('4 pcs'), value: '4 pcs'),
                       ],
-
-                     isExpanded: true,
+                      isExpanded: true,
                       underline: Container(),
-                      onChanged: (Textvalue){
+                      onChanged: (Textvalue) {
                         InputOnChange("Qty", Textvalue);
                       },
+                    ),
+                  ),
+                  SizedBox(height: 20),
 
-                   ),
-                ),
-                SizedBox(height: 20,),
-
-                Container(
-                    child: ElevatedButton(
-                      style: AppButtonStyle(),
-                      onPressed: (){
-                       FormOnSubmit();
-                      },
-
-                      child:SuccessButtonChild("Submit"),),),
-
-
-
-
-
-
-              ],
+                  ElevatedButton(
+                    style: AppButtonStyle(),
+                    onPressed: () {
+                      FormOnSubmit();
+                    },
+                    child: SuccessButtonChild("Submit"),
+                  ),
+                ],
+              ),
             ),
-
-          ),),
+          ),
         ],
-
       ),
+
 
 
     );
