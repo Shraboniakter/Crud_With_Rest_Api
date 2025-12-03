@@ -1,3 +1,4 @@
+import 'package:crud_with_rest_api/RestClient/RestClient.dart';
 import 'package:crud_with_rest_api/style/Style.dart';
 import 'package:flutter/material.dart';
 
@@ -9,6 +10,57 @@ class ProductCreateScreen extends StatefulWidget {
 }
 
 class _ProductCreateScreenState extends State<ProductCreateScreen> {
+
+  Map <String,String> FormValue = {
+    "Img":"",
+    "ProductCode":"",
+    "ProductName":"",
+    "Qty":"",
+    "TotalPrice":"",
+    "UnitPrice":""
+  };
+  InputOnChange(Mapkey,Textvalue){
+    setState(() {
+      FormValue.update(Mapkey, (value) => Textvalue);
+    });
+
+  }
+
+
+  FormOnSubmit() async{
+    if (FormValue['Img']!.length==0){
+      ErrorToast('Image Link Required !');
+
+    }
+    else if (FormValue['ProductCode']!.length==0){
+      ErrorToast('ProductCode Link Required !');
+
+    }
+    else if (FormValue['ProductName']!.length==0){
+      ErrorToast('ProductName Link Required !');
+
+    }
+    else if (FormValue['Qty']!.length==0){
+      ErrorToast('Qty Link Required !');
+
+    }
+    else if (FormValue['TotalPrice']!.length==0){
+      ErrorToast('TotalPrice Link Required !');
+
+    }
+    else if (FormValue['UnitPrice']!.length==0){
+      ErrorToast('UnitPrice Link Required !');
+
+    }
+    else{
+    await  ProductCreateRequest(FormValue);
+
+
+    }
+
+
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -22,37 +74,42 @@ class _ProductCreateScreenState extends State<ProductCreateScreen> {
               children: [
                 TextFormField(
                   decoration: AppInputDecoration("Product Name"),
-                  onChanged: (value){
+                  onChanged: (Textvalue){
+                    InputOnChange("ProductName", Textvalue);
 
                 },),
                 SizedBox(height: 20,),
                 TextFormField(
                   decoration: AppInputDecoration("Product Code"),
-                  onChanged: (value){
+                  onChanged: (Textvalue){
+                    InputOnChange("ProductCode", Textvalue);
 
                 },),
                 SizedBox(height: 20,),
                 TextFormField(
                   decoration: AppInputDecoration("Product Image"),
-                  onChanged: (value){
+                  onChanged: (Textvalue){
+                    InputOnChange("Img", Textvalue);
 
                 },),
                 SizedBox(height: 20,),
                 TextFormField(
                   decoration: AppInputDecoration("Unit Price"),
-                  onChanged: (value){
+                  onChanged: (Textvalue){
+                    InputOnChange("UnitPrice", Textvalue);
 
                 },),
                 SizedBox(height: 20,),
                 TextFormField(
                   decoration: AppInputDecoration("Total Price"),
-                  onChanged: (value){
+                  onChanged: (Textvalue){
+                    InputOnChange("TotalPrice", Textvalue);
 
                 },),
                 SizedBox(height: 20,),
                 AppDropDownStyle(
                    DropdownButton(
-                      value: '',
+                      value: FormValue['Qty'],
                       items: [
                         DropdownMenuItem(child:Text('Select Qt') , value: '',),
                         DropdownMenuItem(child:Text('1 pcs') , value: '1 pcs',),
@@ -63,7 +120,9 @@ class _ProductCreateScreenState extends State<ProductCreateScreen> {
 
                      isExpanded: true,
                       underline: Container(),
-                      onChanged: (value){},
+                      onChanged: (Textvalue){
+                        InputOnChange("Qty", Textvalue);
+                      },
 
                    ),
                 ),
@@ -72,7 +131,9 @@ class _ProductCreateScreenState extends State<ProductCreateScreen> {
                 Container(
                     child: ElevatedButton(
                       style: AppButtonStyle(),
-                      onPressed: (){},
+                      onPressed: (){
+                       FormOnSubmit();
+                      },
 
                       child:SuccessButtonChild("Submit"),),),
 
