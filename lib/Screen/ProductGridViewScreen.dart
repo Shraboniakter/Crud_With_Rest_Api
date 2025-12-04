@@ -1,3 +1,4 @@
+import 'package:crud_with_rest_api/Screen/ProductUpdateScreen.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
@@ -30,7 +31,47 @@ class _ProductGridViewScreenState extends State<ProductGridViewScreen> {
     ProductList=data;
     Loading=false;
   });
+  }
 
+  DeleteItem(id) async{
+   showDialog(
+    context:context,
+    builder: (BuildContext context){
+      return AlertDialog(
+        title: Text("Delete !"),
+        content: Text("Once delete, you can't get it back"),
+        actions: [
+          OutlinedButton(onPressed: ()async {
+
+            Navigator.pop(context);
+            setState(() {
+
+              Loading=true;
+            });
+           await ProductDeleteRequest(id);
+          await CallData();
+
+
+
+          }, child: Text("Yes"),
+          ),
+          OutlinedButton(onPressed: (){
+            Navigator.pop(context);
+          }, child: Text("No"),
+          ),
+        ],
+      );
+    }
+   );
+  }
+
+  GotoUpdate(context,productItem){
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (builder)=> ProductUpdateScreen(productItem),
+      ),
+    );
 
   }
 
@@ -76,7 +117,7 @@ class _ProductGridViewScreenState extends State<ProductGridViewScreen> {
                   children: [
                     Expanded(
                       child: Image.network(
-                        ProductList[index]['image'],
+                        ProductList[index]['Img'],
                         fit: BoxFit.cover,
                       ),
                     ),
@@ -86,15 +127,18 @@ class _ProductGridViewScreenState extends State<ProductGridViewScreen> {
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          Text(ProductList[index]['bookName']),
+                          Text(ProductList[index]['ProductName']),
                           SizedBox(height: 2),
-                          Text("author: ${ProductList[index]['author']}"),
+                          Text("Price ${ProductList[index]['UnitPrice']}"),
 
                           Row(
                             mainAxisAlignment: MainAxisAlignment.end,
                             children: [
                               OutlinedButton(
-                                onPressed: () {},
+                                onPressed: () {
+
+                                 GotoUpdate(context,ProductList[index]);
+                                },
                                 style: OutlinedButton.styleFrom(
                                   side: BorderSide(color: Colors.grey, width: 1.5),
                                   shape: RoundedRectangleBorder(
@@ -112,7 +156,9 @@ class _ProductGridViewScreenState extends State<ProductGridViewScreen> {
                               SizedBox(width: 4),
 
                               OutlinedButton(
-                                onPressed: () {},
+                                onPressed: (){
+                                  DeleteItem( ProductList[index]['_id'],);
+                                },
                                 style: OutlinedButton.styleFrom(
                                   side: BorderSide(color: Colors.grey, width: 1.5),
                                   shape: RoundedRectangleBorder(
@@ -145,6 +191,19 @@ class _ProductGridViewScreenState extends State<ProductGridViewScreen> {
         
         
         ],
+      ),
+      floatingActionButton: FloatingActionButton(onPressed: (){
+
+        Navigator.push(
+            context,
+            MaterialPageRoute(
+                builder: (builder)=> ProductCreateScreen(),
+            ),
+        );
+      },
+        backgroundColor: colorGreen,
+        foregroundColor: colorWhite,
+      child: Icon(Icons.add),
       ),
 
     );

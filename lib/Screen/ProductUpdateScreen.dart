@@ -1,18 +1,22 @@
-import 'package:crud_with_rest_api/RestClient/RestClient.dart';
-import 'package:crud_with_rest_api/style/Style.dart';
+import 'package:crud_with_rest_api/Screen/ProductGridViewScreen.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_spinkit/flutter_spinkit.dart';
+import 'package:flutter_spinkit/flutter_spinkit.dart' show SpinKitWaveSpinner;
 
-import 'ProductGridViewScreen.dart';
+import '../RestClient/RestClient.dart';
+import '../style/Style.dart';
 
-class ProductCreateScreen extends StatefulWidget {
-  const ProductCreateScreen({super.key});
+class ProductUpdateScreen extends StatefulWidget {
+  final Map productItem;
+  const ProductUpdateScreen(
+      this.productItem,
+
+      );
 
   @override
-  State<ProductCreateScreen> createState() => _ProductCreateScreenState();
+  State<ProductUpdateScreen> createState() => _ProductUpdateScreenState();
 }
 
-class _ProductCreateScreenState extends State<ProductCreateScreen> {
+class _ProductUpdateScreenState extends State<ProductUpdateScreen> {
 
   Map <String,String> FormValue = {
     "Img":"",
@@ -22,6 +26,21 @@ class _ProductCreateScreenState extends State<ProductCreateScreen> {
     "TotalPrice":"",
     "UnitPrice":""
   };
+  @override
+  void initState() {
+    setState(() {
+      FormValue.update("Img", (value) => widget.productItem['Img']);
+      FormValue.update("ProductCode", (value) => widget.productItem['ProductCode']);
+      FormValue.update("ProductName", (value) => widget.productItem['ProductName']);
+      FormValue.update("Qty", (value) => widget.productItem['Qty']);
+      FormValue.update("TotalPrice", (value) => widget.productItem['TotalPrice']);
+      FormValue.update("UnitPrice", (value) =>widget.productItem['UnitPrice']);
+    });
+
+    super.initState();
+  }
+
+
   bool Loading = false;
 
   InputOnChange(Mapkey,Textvalue){
@@ -61,12 +80,13 @@ class _ProductCreateScreenState extends State<ProductCreateScreen> {
       setState(() {
         Loading=true;
       });
-    await  ProductCreateRequest(FormValue);
+     await ProductUpdateRequest(FormValue,widget.productItem['_id'] );
 
-      Navigator.pushAndRemoveUntil(context,
+     Navigator.pushAndRemoveUntil(context,
         MaterialPageRoute(builder: (builder)=> ProductGridViewScreen()),
-            (Route route)=> false,
-      );
+         (Route route)=> false,
+     );
+
       setState(() {
         Loading=false;
       });
@@ -74,14 +94,13 @@ class _ProductCreateScreenState extends State<ProductCreateScreen> {
     }
 
   }
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
         backgroundColor: colorWhite,
         title: Text(
-          "Create Product ",
+          "Update Product ",
           style: TextStyle(color: Colors.black),
         ),
         centerTitle: true,
@@ -99,6 +118,7 @@ class _ProductCreateScreenState extends State<ProductCreateScreen> {
               child: Column(
                 children: [
                   TextFormField(
+                    initialValue: FormValue['ProductName'] ,
                     decoration: AppInputDecoration("Product Name"),
                     onChanged: (Textvalue) {
                       InputOnChange("ProductName", Textvalue);
@@ -107,6 +127,7 @@ class _ProductCreateScreenState extends State<ProductCreateScreen> {
                   SizedBox(height: 20),
 
                   TextFormField(
+                    initialValue:  FormValue['ProductCod'] ,
                     decoration: AppInputDecoration("Product Code"),
                     onChanged: (Textvalue) {
                       InputOnChange("ProductCode", Textvalue);
@@ -115,6 +136,7 @@ class _ProductCreateScreenState extends State<ProductCreateScreen> {
                   SizedBox(height: 20),
 
                   TextFormField(
+                    initialValue: FormValue['Img'] ,
                     decoration: AppInputDecoration("Product Image"),
                     onChanged: (Textvalue) {
                       InputOnChange("Img", Textvalue);
@@ -123,6 +145,7 @@ class _ProductCreateScreenState extends State<ProductCreateScreen> {
                   SizedBox(height: 20),
 
                   TextFormField(
+                    initialValue: FormValue['UnitPrice'] ,
                     decoration: AppInputDecoration("Unit Price"),
                     onChanged: (Textvalue) {
                       InputOnChange("UnitPrice", Textvalue);
@@ -131,6 +154,7 @@ class _ProductCreateScreenState extends State<ProductCreateScreen> {
                   SizedBox(height: 20),
 
                   TextFormField(
+                    initialValue:FormValue['TotalPrice'] ,
                     decoration: AppInputDecoration("Total Price"),
                     onChanged: (Textvalue) {
                       InputOnChange("TotalPrice", Textvalue);
@@ -140,7 +164,8 @@ class _ProductCreateScreenState extends State<ProductCreateScreen> {
 
                   AppDropDownStyle(
                     DropdownButton(
-                      value: FormValue['Qty'],
+
+                     // value: FormValue['Qty'],
                       items: [
                         DropdownMenuItem(child: Text('Select Qt'), value: ''),
                         DropdownMenuItem(child: Text('1 pcs'), value: '1 pcs'),
@@ -170,7 +195,6 @@ class _ProductCreateScreenState extends State<ProductCreateScreen> {
           ),
         ],
       ),
-
 
 
     );
